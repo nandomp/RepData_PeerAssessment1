@@ -2,8 +2,9 @@
 title: 'Reproducible Research: Peer Assessment 1'
 author: "Fernando Martínez Plumed"
 date: "23th of September,2015"
-output: 
-  pdf_document: 
+output:
+  html_document: default
+  pdf_document:
     keep_tex: yes
 ---
 
