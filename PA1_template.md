@@ -2,7 +2,9 @@
 title: 'Reproducible Research: Peer Assessment 1'
 author: "Fernando Martínez Plumed"
 date: "23th of September,2015"
-output: html_document
+output: 
+  pdf_document: 
+    keep_tex: yes
 ---
 
 #Loading and preprocessing the data
@@ -68,21 +70,24 @@ Activity.day <- group_by(Activity, date)
 Activity.day
 Activity.day.sum <- summarise(Activity.day, total= sum(steps,na.rm = T))
 
+
+
 g <- ggplot(select(Activity.day.sum, date, total), aes(x=total))
 g + geom_histogram(binwidth=5000) + ggtitle("Histogram of total number of steps per day")+ xlab("Total steps per day")
 
-```
 
+```
+![plot of chunk plot1](instructions_fig/plot1.png) 
 
 
 ```{r}
-mean <- round(mean(Activity.day.sum$total, na.rm = T),2)
-median <- round(median(Activity.day.sum$total, na.rm = T),2)
+trunc(mean(Activity.day.sum$total, na.rm = T))
+trunc(median(Activity.day.sum$total, na.rm = T))
 
 ```
 
-Mean: `r mean` and median: `r median` 
-
+MEAN: 10766
+MEDIAN: 10765
 
 
 #What is the average daily activity pattern?
@@ -93,10 +98,13 @@ Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and 
 Activity.interval <- group_by(Activity, interval) 
 Activity.interval.avg <- summarise(Activity.interval, avg = mean(steps, na.rm=T))
   
+
 g <- ggplot(Activity.interval.avg, aes(interval, avg))
 g + geom_line() + ggtitle("Average number of steps over all days") + xlab("Interval") + ylab("Average number of steps")
-```
 
+
+```
+![plot of chunk plot2](instructions_fig/plot2.png) 
 
 
 ```{r}
@@ -144,22 +152,25 @@ Activity.clean.day <- group_by(Activity.clean, date)
 Activity.clean.day
 Activity.clean.day.sum <- summarise(Activity.clean.day, total= sum(steps))
 
+
 g <- ggplot(Activity.clean.day.sum, aes(total))
 g + geom_histogram(binwidth = 5000) + ggtitle("Histogram of total number of steps per day") + xlab("Total steps per day")
 
+
+
 ```
+![plot of chunk plot3](instructions_fig/plot3.png) 
+
 
 ```{r}
-mean <- round(mean(Activity.clean.day.sum$total, na.rm = T), 2)
-median <- round(median(Activity.clean.day.sum$total, na.rm = T),2)
+trunc(mean(Activity.clean.day.sum$total, na.rm = T))
+trunc(median(Activity.clean.day.sum$total, na.rm = T))
 
 ```
+MEAN: 10766
+MEDIAN: 10765
 
-
-Mean: `r mean` and median: `r median` 
-
-Mean and median show slight differences between both datasets.
-
+Comparing original and modified data There is no significant change in the results: the number of valid samples in the modified data is greater, so the total steps is also greater, but the histogram is very similar in shape, and the mean and median are practily the same
 
 #Are there differences in activity patterns between weekdays and weekends?
 
@@ -181,12 +192,14 @@ Activity.clean$wd<- as.factor(Activity.clean$wd)
 Activity.clean.wd <- group_by(Activity.clean, interval, wd)
 Activity.clean.wd.avg <- summarise(Activity.clean.wd, avg = mean(steps))
 
+
+
 g <- ggplot(Activity.clean.wd.avg, aes(interval, avg))
 g + geom_line() + facet_grid(wd ~ .) 
 
-#
+
 
 ```
-
+![plot of chunk plot4](instructions_fig/plot4.png) 
 
 Yes, it seems there are a lot of differences between weekdays and weekends. People tend to wake up later. During weekdays the activity peak is at 8:35 am whereas in the weekend the peaks are around 10:00 am and 4:00 pm
