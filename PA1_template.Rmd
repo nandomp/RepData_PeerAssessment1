@@ -2,7 +2,7 @@
 title: 'Reproducible Research: Peer Assessment 1'
 author: "Fernando Martínez Plumed"
 date: "23th of September,2015"
-output: html_document
+output: pdf_document
 ---
 
 #Loading and preprocessing the data
@@ -68,20 +68,22 @@ Activity.day <- group_by(Activity, date)
 Activity.day
 Activity.day.sum <- summarise(Activity.day, total= sum(steps,na.rm = T))
 
+
+
 g <- ggplot(select(Activity.day.sum, date, total), aes(x=total))
 g + geom_histogram(binwidth=5000) + ggtitle("Histogram of total number of steps per day")+ xlab("Total steps per day")
+
 
 ```
 
 
 
 ```{r}
-mean <- round(mean(Activity.day.sum$total, na.rm = T),2)
-median <- round(median(Activity.day.sum$total, na.rm = T),2)
+mean <- trunc(mean(Activity.day.sum$total, na.rm = T))
+median <- trunc(median(Activity.day.sum$total, na.rm = T))
 
 ```
 
-Mean: `r mean` and median: `r median` 
 
 
 
@@ -93,8 +95,11 @@ Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and 
 Activity.interval <- group_by(Activity, interval) 
 Activity.interval.avg <- summarise(Activity.interval, avg = mean(steps, na.rm=T))
   
+
 g <- ggplot(Activity.interval.avg, aes(interval, avg))
 g + geom_line() + ggtitle("Average number of steps over all days") + xlab("Interval") + ylab("Average number of steps")
+
+
 ```
 
 
@@ -144,19 +149,21 @@ Activity.clean.day <- group_by(Activity.clean, date)
 Activity.clean.day
 Activity.clean.day.sum <- summarise(Activity.clean.day, total= sum(steps))
 
+
 g <- ggplot(Activity.clean.day.sum, aes(total))
 g + geom_histogram(binwidth = 5000) + ggtitle("Histogram of total number of steps per day") + xlab("Total steps per day")
+
+
 
 ```
 
 ```{r}
-mean <- round(mean(Activity.clean.day.sum$total, na.rm = T), 2)
-median <- round(median(Activity.clean.day.sum$total, na.rm = T),2)
+mean <- trunc(mean(Activity.clean.day.sum$total, na.rm = T))
+median <- trunc(median(Activity.clean.day.sum$total, na.rm = T))
 
 ```
 
 
-Mean: `r mean` and median: `r median` 
 
 Mean and median show slight differences between both datasets.
 
@@ -181,10 +188,12 @@ Activity.clean$wd<- as.factor(Activity.clean$wd)
 Activity.clean.wd <- group_by(Activity.clean, interval, wd)
 Activity.clean.wd.avg <- summarise(Activity.clean.wd, avg = mean(steps))
 
+
+
 g <- ggplot(Activity.clean.wd.avg, aes(interval, avg))
 g + geom_line() + facet_grid(wd ~ .) 
 
-#
+
 
 ```
 
